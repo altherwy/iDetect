@@ -1,0 +1,52 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package idetect;
+import java.sql.*;
+import com.mysql.jdbc.PreparedStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+/**
+ *
+ * @author youssef 19
+ */
+public class WebSiteDA {
+    static final String db_driver = "com.mysql.jdbc.Driver";
+    static final String db_url = "jdbc:mysql://localhost:3306/test";
+    static final String user_name = "root";
+    static final String password = "barcelona19";
+    public Connection con;
+    public WebSiteDA(){
+        try {
+            Class.forName(db_driver);
+            con = DriverManager.getConnection(db_url, user_name, password);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public boolean checkAvailablity(String URL){
+        String sql = "UPDATE website SET URL = ? where URL = ? ;";
+        try{
+        java.sql.PreparedStatement pr = con.prepareStatement(sql);
+        pr.setString(1, URL);
+        pr.setString(2, URL);
+        int i = pr.executeUpdate();
+        if(i >=1)
+            return true;
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        return false;
+    }
+
+
+}

@@ -1,0 +1,38 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package idetect;
+
+import java.util.ArrayList;
+import java.util.jar.Attributes;
+import org.xml.sax.*;
+import org.xml.sax.helpers.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.text.DefaultCaret;
+import org.xml.sax.helpers.DefaultHandler;
+import java.io.*;
+
+/**
+ *
+ * @author youssef 19
+ */
+public class SaxParser {
+
+    ArrayList<String> ar = new ArrayList<String>();
+    ArrayList<String> onlinee = new ArrayList<String>();
+    ArrayList<String> verifiedd = new ArrayList<String>();
+
+    public void list() throws Exception {
+        //XMLReader parser = XMLReaderFactory.createXMLReader("org.apache.crimson.parser.XMLReaderImpl");
+        //Refer to the comments below for the explanation for commenting above line and putting a new one below.
+        XMLReader parser = XMLReaderFactory.createXMLReader();
+        System.out.println("I am before saxPArser");
+        parser.setContentHandler(new SaxParserHelper());
+        parser.parse("PhishTankDB.xml");
+        System.out.println(ar);
+        System.out.println(onlinee);
+        System.out.println(verifiedd);
+    }
+}

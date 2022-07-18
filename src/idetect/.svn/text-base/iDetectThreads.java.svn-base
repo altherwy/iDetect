@@ -1,0 +1,73 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package idetect;
+
+import java.util.ArrayList;
+import javax.swing.JEditorPane;
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author youssef 19
+ */
+public class iDetectThreads implements Runnable {
+
+    public Thread thread;
+    public ArrayList<String> enumerationArray = new ArrayList<String>();
+    public Connection connection;
+    //public ArrayList<WebSite> threadWebSiteArray = new ArrayList<WebSite>();
+
+
+    public iDetectThreads(String threadName, ArrayList<String> threadArray) {
+        thread = new Thread(this, threadName);
+       this.enumerationArray = threadArray;
+    }
+
+    public void run() {
+        //WebSite webSite = new WebSite();
+        //threadWebSiteArray = webSite.deleteRepeatedWebsites(threadArray);
+        //this.display(threadWebSiteArray);
+        DBConnection dbc = new DBConnection();
+        int i=0;
+        Boolean state;
+        Object content;
+        String MIME;
+        String html = "Empty";
+        while (i<enumerationArray.size())
+        {
+            connection = new Connection();
+            state=connection.getSourceCode(enumerationArray.get(i));
+            content = connection.content;
+                MIME = connection.MIMEtype;
+                if (MIME.equals("text/html") && content instanceof String) {
+                    html = (String) content;
+                    ////// here DB business save Source code + state(Online , Offline)///////
+                }
+                if(!html.equals("Empty")){
+                dbc.insertWebSite(enumerationArray.get(i), "false", html, state.toString());
+                System.out.println("DOne");
+                }
+            i = enumerationArray.size();
+        }
+
+
+
+
+
+
+    }
+
+    public void display(ArrayList<WebSite> webSite) {
+        ArrayList<String> save = new ArrayList<String>();
+        for (int i = 0; i < webSite.size(); i++) {
+            save.add(webSite.get(i).getUrl()+webSite.get(i).getTopLevel());
+        }
+        int index = 0;
+        while (index < save.size()) {
+            System.out.println(Thread.currentThread().getName() + "  " + save.get(index));
+            index++;
+        }
+    }
+}

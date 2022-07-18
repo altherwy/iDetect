@@ -1,0 +1,27 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package idetect;
+
+import java.sql.Date;
+import java.sql.Time;
+
+/**
+ *
+ * @author youssef 19
+ */
+public class Time_Date {
+    private Time time;
+    private Date date;
+    private WebSite url;
+    private int Time_Date = -1;
+   
+   
+    public void set_Timer(Time time,Date date,String url)
+    {
+        
+    }
+
+}

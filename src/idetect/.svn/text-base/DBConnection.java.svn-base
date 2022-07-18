@@ -1,0 +1,134 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package idetect;
+
+import com.mysql.jdbc.PreparedStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author youssef 19
+ */
+public class DBConnection {
+
+    static final String db_driver = "com.mysql.jdbc.Driver";
+    static final String db_url = "jdbc:mysql://localhost:3306/test";
+    static final String user_name = "root";
+    static final String password = "barcelona19";
+    public Connection con;
+
+    public DBConnection() {
+
+        try {
+            Class.forName(db_driver);
+            con = DriverManager.getConnection(db_url, user_name, password);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+
+        }
+    }
+
+    public void insertWebSite(String URL, String phishingState, String sourceCode, String webSiteState) {
+        try {
+            String sql = "insert into website(URL, phishing, source_code, active) VALUES (?, ?, ?, ?)";
+            java.sql.PreparedStatement p = con.prepareStatement(sql);
+            p.setString(1, URL);
+            p.setString(2, phishingState);
+            p.setString(3, sourceCode);
+            p.setString(4, webSiteState);
+
+            int i = p.executeUpdate();
+            if (i == 1) {
+                System.out.println("Database Changed");
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+
+        }
+    }
+
+    public String getSourceCodeForUrl(String URL, int websiteID) {
+        java.sql.ResultSet rs = null;
+        String sql = "select source_code , COUNT(websiteID) as number from website where URL = ? and websiteID = ? ";
+        String d = "Empty";
+        try {
+            java.sql.PreparedStatement p = con.prepareStatement(sql);
+            p.setString(1, URL);
+            p.setInt(2, websiteID);
+            rs = p.executeQuery();
+            rs.beforeFirst();
+            ResultSet save = rs;
+            int count;
+
+            do {
+                rs.next();
+                d = rs.getString("source_code");
+                count = rs.getInt("number");
+
+            } while (count < 1);
+
+
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return d;
+
+
+    }
+
+    public int getTotalRowsNumber() {
+        String sql = "SELECT COUNT(websiteID) AS rowsnumber FROM website";
+        java.sql.ResultSet rs = null;
+        int count = -1;
+        try {
+            java.sql.PreparedStatement p = con.prepareStatement(sql);
+            rs = p.executeQuery();
+            rs.beforeFirst();
+            rs.next();
+            count = rs.getInt("rowsnumber");
+
+        } catch (Exception ex) {
+            System.out.println("WebsiteDA  " + ex.toString());
+        }
+        return count;
+
+    }
+
+    public int getRowsNumber(ResultSet rs) throws SQLException {
+        int count = 0;
+        rs.beforeFirst();
+        while (rs.next()) {
+            count++;
+        }
+        return count;
+
+    }
+
+    public void insertJustSourceCode(String URL, String source_code) {
+        String sql = "insert into website(URL,source_code) values(?,?);";
+        java.sql.PreparedStatement pr;
+        try {
+            pr = con.prepareStatement(sql);
+            pr.setString(1, URL);
+            pr.setString(2, source_code);
+            int t = pr.executeUpdate();
+            if (t == 1) {
+                System.out.println("DOne");
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());
+        }
+    }
+}

@@ -1,0 +1,421 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package idetect;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author youssef 19
+ */
+public class WebSite {
+
+    private String url;
+    private String topLevel;
+    private boolean isHacked;
+    private boolean isPhishied;
+    private boolean active;
+    private boolean forHacking;
+    private boolean forPhishing;
+    private ArrayList<WebSite> webSite = new ArrayList<WebSite>();
+    public ArrayList<String> thread1 = new ArrayList<String>();
+    public ArrayList<String> thread2 = new ArrayList<String>();
+    public ArrayList<String> thread3 = new ArrayList<String>();
+    public ArrayList<String> thread4 = new ArrayList<String>();
+    public ArrayList<String> thread5 = new ArrayList<String>();
+    public ArrayList<String> thread6 = new ArrayList<String>();
+    private Administrator administrator;
+
+    public WebSite(String url, String topLevel, boolean isHacked, boolean isPhishied, boolean active, boolean forHacking, boolean forPhishing) {
+        this.setUrl(url);
+        this.setIsHacked(isHacked);
+        this.setIsPhishied(isPhishied);
+        this.setActive(active);
+        this.setForHacking(forHacking);
+        this.setForPhishing(forPhishing);
+        this.setTopLevel(topLevel);
+
+
+    }
+
+    public WebSite(String url, boolean isHacked, boolean isPhishied, boolean active, boolean forHacking, boolean forPhishing, int adminID) {
+        this.setUrl(url);
+        this.setIsHacked(isHacked);
+        this.setIsPhishied(isPhishied);
+        this.setActive(active);
+        this.setForHacking(forHacking);
+        this.setForPhishing(forPhishing);
+        this.administrator.setAdminId(adminID);
+    }
+
+    public WebSite() {
+        this.setUrl("");
+        this.setIsHacked(false);
+        this.setIsPhishied(false);
+        this.setForHacking(false);
+        this.setForPhishing(true);
+        this.setActive(false);
+    }
+
+    public ArrayList<String> generateEnumeration() {
+        Phishing_Possiblity phishingEnumeration = new Phishing_Possiblity("", false, false, this.url);
+        ArrayList<String> enumeration = phishingEnumeration.dublicateTechnique(this.getUrl(), this.getTopLevel());
+        enumeration = phishingEnumeration.commonReplacement(this.getUrl(), this.getTopLevel());
+        enumeration = phishingEnumeration.QWERTYMisType(this.getUrl(), getTopLevel());
+        enumeration = phishingEnumeration.dropCharTechnique(this.getUrl(), getTopLevel());
+        enumeration = phishingEnumeration.urlPlural(this.getUrl(), getTopLevel());
+        enumeration = phishingEnumeration.WWWWithUrl(this.getUrl(), this.getTopLevel());
+        enumeration = phishingEnumeration.topLevelDomainManipulation(this.getTopLevel(), this.getUrl());
+        enumeration = phishingEnumeration.deleteRepeatedEnumeration(enumeration);
+        return enumeration;
+    }
+
+    public ArrayList<WebSite> initialWebSites(ArrayList<String> enumeration) {
+        int index = 0;
+        String save;
+        String urlTopLevel;
+        int i;
+        while (index < enumeration.size()) {
+            save = enumeration.get(index);
+            i = save.length() - 3;
+            save = save.substring(0, i);
+            if (save.contains(".")) {
+                save = save.substring(0, i - 1);
+            }
+            urlTopLevel = enumeration.get(index).substring(i);
+            if (urlTopLevel.contains(".")) {
+                urlTopLevel = urlTopLevel.substring(1);
+            }
+            WebSite temp = new WebSite(save, urlTopLevel, this.getIsHacked(), this.getIsPhishied(), this.getActive(), this.getForHacking(), this.getForPhishing());
+            webSite.add(temp);
+            index++;
+        }
+        return webSite;
+    }
+
+    public ArrayList<Boolean> webSiteCollectionStates() throws MalformedURLException, IOException {
+
+        ArrayList<String> save = this.generateEnumeration();
+        ArrayList<String> URLs = new ArrayList<String>();
+        for (int i = 0; i < save.size(); i++) {
+            URLs.add(save.get(i));
+        }
+        Connection c = new Connection();
+        ArrayList<Boolean> webSiteStatuesAttr = c.onlineOrNot(URLs);
+        return webSiteStatuesAttr;
+
+    }
+
+    public boolean webSiteIndividualsStates() throws MalformedURLException, IOException {
+        Connection c = new Connection();
+        boolean statues = c.onlineOrNot(this.getUrl());
+        return statues;
+
+    }
+
+    public String checkingTitleTag(String html) {
+
+        String save = html;
+        String start = "";
+        String end = "";
+        int startIndex = save.indexOf("<title");
+        int endIndex = save.indexOf("</title>");
+        save = save.substring(startIndex, endIndex);
+        int index = save.indexOf(">");
+        save = save.substring(index + 1);
+        if (save.contains("&") && save.contains(";")) {
+            startIndex = save.indexOf("&");
+            endIndex = save.indexOf(";");
+            if (endIndex - startIndex <= 5) {
+                start = save.substring(0, startIndex);
+                end = save.substring(endIndex + 1);
+                save = start + end;
+            }
+        }
+        save = save.trim();
+        return save;
+    }
+
+    public String formatGoogleQuery(String title) {
+        String save = title.replace(" ", "+");
+        return save;
+    }
+
+    public boolean sourceCodeTechnique(String html, String phishingURL) {
+        Connection c = new Connection();
+        DBConnection dbc = new DBConnection();
+        String save = html;
+        ///// (START)   Extract First website from Google result page ////
+
+        int searchResultIndex = save.indexOf("Search Result");
+        save = save.substring(searchResultIndex);
+        int hrefIndex = save.indexOf("<a href=");
+        save = save.substring(hrefIndex);
+        int endIndex = save.indexOf("class");
+        save = save.substring(9, endIndex - 2); //// 1st website URL ///
+        //// (END) ////
+        // String source_code = c.getAnySourceCode(save); //// 1st website (In google result page ) HTML code ///
+        //dbc.insertWebSite(save, "false", source_code, "online");
+        //source_code = dbc.getSourceCodeForUrl(save, 2);
+        if (phishingURL.equals(save)) {
+            return false;
+        }
+        String firstURL = this.bringMainDomain(phishingURL); /// Home Page for Phishing website /////
+        String secondURL = this.bringMainDomain(save); /// Home Page for 1st website in Google result page /////
+        // String firstHTML = c.getAnySourceCode(firstURL); ///  Source code for phishing website Home page ////
+        //String secondHTML = c.getAnySourceCode(secondURL); /// Source code for 1st website in Google result page ///
+        //  dbc.insertWebSite(firstURL, "false", firstHTML, "true");
+        // dbc.insertWebSite(secondURL, "false", secondHTML, "true");
+        if (firstURL.equals(secondURL)) {
+            return false;
+        }
+        return true; //// that's doesn't mean completly Phishing wesite /////
+
+
+
+    }
+
+    public String bringMainDomain(String URL) {
+        String save = URL;
+        if (save.contains("http://")) {
+            save = save.substring(7);
+            int slashIndex = save.indexOf("/");
+            save = save.substring(0, slashIndex);
+            if (save.charAt(save.length() - 1) == '/') {
+                save = "http://" + save;
+            } else {
+                save = "http://" + save + "/";
+            }
+        } else if (save.contains("https://")) {
+            save = save.substring(8);
+            int slashIndex = save.indexOf("/");
+            save = save.substring(0, slashIndex);
+            if (save.charAt(save.length() - 1) == '/') {
+                save = "https://" + save;
+            } else {
+                save = "https://" + save + '/';
+            }
+        } else {
+            return "Invalid URL";
+        }
+
+        return save;
+    }
+
+    public String checkURL(String URL) {
+        URL = URL.toLowerCase();
+        String save = URL.trim(); //// remove spaces /////
+        String numbers = "1234567890";
+        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+        Character temp = '?';
+        String temp2 = "";
+        int index = 0;
+        int hypthen = 0;
+        String http = "http://";
+        String slash = "/";
+        String https = "https://";
+        String space = " ";
+        String WWW = "www.";
+        try {
+            if (save.contains(http) || save.contains(slash) || save.contains(https) || save.contains(space) || save.startsWith(WWW)) {
+                throw new Exception("Enter valid URL");
+            }
+            if (save.startsWith("-") || save.endsWith("-") || save.startsWith(".") || save.endsWith(".")) {
+                throw new Exception("Valid URL doesn't start with '-','.' or end with it");
+            }
+            while (index < save.length()) {
+                temp = save.charAt(index);
+                temp2 = temp.toString();
+                if (!(numbers.contains(temp2) || alphabet.contains(temp2) || temp2.equals("."))) {
+                    if (temp == '-' && hypthen < 1) {
+                        hypthen++;
+                    } else {
+                        throw new Exception("Enter valid URL");
+                    }
+                }
+                index++;
+
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "InvalidURL", 0);
+        }
+
+        return save;
+    }
+    ///// Final filter /////
+
+    /*  public ArrayList<WebSite> deleteRepeatedWebsites(ArrayList<String> enumeration) {
+    ArrayList<String> save = this.checkingTitleTag(enumeration);
+    ArrayList<String> compare = new ArrayList<String>();
+    ArrayList<WebSite> temp;
+    for (int i = 0; i < save.size(); i++) {
+    if (!compare.contains(save.get(i))) {
+    compare.add(enumeration.get(i));
+    }
+    }
+    temp = initialWebSites(compare);
+    return temp;
+    }*/
+    public void splitEnumerationArray(ArrayList<String> enumeration) {
+        for (int i = 0; i < enumeration.size(); i = i + 6) {
+
+            thread1.add(enumeration.get(i));
+            if (i + 1 < enumeration.size()) {
+                thread2.add(enumeration.get(i + 1));
+            }
+            if (i + 2 < enumeration.size()) {
+                thread3.add(enumeration.get(i + 2));
+            }
+            if (i + 3 < enumeration.size()) {
+                thread4.add(enumeration.get(i + 3));
+            }
+            if (i + 4 < enumeration.size()) {
+                thread5.add(enumeration.get(i + 4));
+            }
+            if (i + 5 < enumeration.size()) {
+                thread6.add(enumeration.get(i + 5));
+            }
+        }
+    }
+
+    public ArrayList<String> getURLs(ArrayList<WebSite> web) {
+        ArrayList<String> save = new ArrayList<String>();
+        for (int i = 0; i < web.size(); i++) {
+            save.add(web.get(i).getUrl() + "." + web.get(i).getTopLevel());
+        }
+        return save;
+    }
+
+    /**
+     * @return the url
+     */
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * @param url the url to set
+     */
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    /**
+     * @return the isHacked
+     */
+    public boolean getIsHacked() {
+        return isHacked;
+    }
+
+    /**
+     * @param isHacked the isHacked to set
+     */
+    public void setIsHacked(boolean isHacked) {
+        this.isHacked = isHacked;
+    }
+
+    /**
+     * @return the isPhishied
+     */
+    public boolean getIsPhishied() {
+        return isPhishied;
+    }
+
+    /**
+     * @param isPhishied the isPhishied to set
+     */
+    public void setIsPhishied(boolean isPhishied) {
+        this.isPhishied = isPhishied;
+    }
+
+    /**
+     * @return the active
+     */
+    public boolean getActive() {
+        Connection c = new Connection();
+        boolean b;
+        try {
+            b = c.onlineOrNot(this.url + this.topLevel);
+            return b;
+        } catch (Exception e) {
+            //return false;
+            //  System.out.println(e.toString());
+            return false;
+        }
+    }
+
+    public void checkUrl(String url) {
+        String save = url;
+        boolean emptyState;
+        try {
+
+            /*emptyState = save.contains("");
+            if (emptyState == Boolean.TRUE) {
+            throw new Exception("You must write valid URL");
+            }*/
+            if (save.contains("http://")) {
+                throw new Exception("Enter the URL without http//www.");
+            }
+            if (save.contains("https://")) {
+                throw new Exception("This is a valid website not a Phishing website");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString());
+        }
+    }
+
+    /**
+     * @param active the active to set
+     */
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    /**
+     * @return the forHacking
+     */
+    public boolean getForHacking() {
+        return forHacking;
+    }
+
+    /**
+     * @param forHacking the forHacking to set
+     */
+    public void setForHacking(boolean forHacking) {
+        this.forHacking = forHacking;
+    }
+
+    /**
+     * @return the forPhishing
+     */
+    public boolean getForPhishing() {
+        return forPhishing;
+    }
+
+    /**
+     * @param forPhishing the forPhishing to set
+     */
+    public void setForPhishing(boolean forPhishing) {
+        this.forPhishing = forPhishing;
+    }
+
+    /**
+     * @return the topLevel
+     */
+    public String getTopLevel() {
+        return topLevel;
+    }
+
+    /**
+     * @param topLevel the topLevel to set
+     */
+    public void setTopLevel(String topLevel) {
+        this.topLevel = topLevel;
+    }
+}

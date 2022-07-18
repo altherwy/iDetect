@@ -1,0 +1,241 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package idetect;
+
+import java.util.ArrayList;
+
+/**
+ *
+ * @author youssef 19
+ */
+public class Phishing_Possiblity {
+
+    private String phishingEnumeration;
+    private final String HTTP = "http://www.";
+    private boolean legitimate;
+    private boolean online;
+    private WebSite webSite = new WebSite();
+    public ArrayList<String> saveWebSites = new ArrayList<String>();
+    public ArrayList<Boolean> webSiteStatues = new ArrayList<Boolean>();
+    public char[] replace1 = {'1', '2', '6', '0', 'd', 'e', 'i', 'm', 'p', 's', 'v','b'};
+    public char[] replace2 = {'l', 'z', 'b', 'o', 'b', 'a', 'j', 'n', 'q', 'z', 'w','l'};
+    public char[] QWERTY1 = {'a', 'b', 'b', 'c', 'c', 'd', 'd', 'e', 'e', 'f', 'g', 'h', 'i', 'i', 'j', 'k', 'm', 'o', 'o', 'q', 'r'
+        + 't', 'u', 'x'};
+    public char[] QWERTY2 = {'s', 'n', 'v', 'x', 'v', 'f', 's', 'r', 'w', 'g', 'h', 'j', 'u', 'o', 'k', 'l', 'n', 'p', 'i', 'w', 't'
+        + 'y', 'y', 'z'};
+    public String[] topLevelDomain = {"cm", "co", "cc", "mc", "mo", "om", "de", "ee", "eu", "ne", "tn", "et", "gr", "ro", "com", "edu", "net", "org"};
+
+    public Phishing_Possiblity(String phishingEnumeration, boolean legitimate, boolean online, String url) {
+        this.setPhishingEnumeration(phishingEnumeration);
+        this.setLegitimate(legitimate);
+        this.setOnline(online);
+        this.webSite.setUrl(url);
+
+
+    }
+    ////// Dublicate given URL letters //////
+
+    public ArrayList<String> dublicateTechnique(String URL, String topLevel) {
+        String save = URL;
+
+        for (int i = 0; i < URL.length(); i++) {
+            char c = URL.charAt(i);
+            String first = URL.substring(0, i);
+            String second = URL.substring(i);
+            save = HTTP + first + c + second + "."+topLevel;
+            saveWebSites.add(save);
+            save = URL;
+        }
+        return saveWebSites;
+    }
+    ////// Drop a letter from given URL //////
+
+    public ArrayList<String> dropCharTechnique(String URL, String topLevel) {
+        String save = URL;
+        for (int i = 0; i < URL.length(); i++) {
+            char c = URL.charAt(i);
+            String firstString = URL.substring(0, i);
+            String secondString = URL.substring(i + 1);
+            save = HTTP+firstString + secondString + "."+topLevel;
+            saveWebSites.add(save);
+            save = URL;
+        }
+        return saveWebSites;
+
+    }
+    ////// Delete repeated websites in the ArrayList //////
+
+    public ArrayList<String> deleteRepeatedEnumeration(ArrayList<String> ar) {
+        ArrayList<String> saveArrayList = new ArrayList<String>();
+        for (int i = 0; i < ar.size(); i++) {
+            if (!saveArrayList.contains(ar.get(i))) {
+                saveArrayList.add(ar.get(i));
+            }
+        }
+        return saveArrayList;
+    }
+    ////// Implement common replacement technique //////
+
+    public ArrayList<String> commonReplacement(String URL, String topLevel) {
+        String temp = URL;
+        int i = 0;
+        while (i < temp.length()) {
+            char c = temp.charAt(i);
+            for (int j = 0; j < replace1.length; j++) {
+
+                if (c == replace1[j]) {
+                    temp = Myreplace(replace2[j], temp, i);
+                    saveWebSites.add(HTTP+temp + "."+topLevel);
+                    temp = URL;
+                }
+            }
+            i++;
+        }
+        temp = URL;
+        i = 0;
+        while (i < temp.length()) {
+            char c = temp.charAt(i);
+            for (int j = 0; j < replace2.length; j++) {
+
+                if (c == replace2[j]) {
+                    temp = Myreplace(replace1[j], temp, i);
+                    saveWebSites.add(HTTP+temp + "."+topLevel);
+                    temp = URL;
+                }
+            }
+            i++;
+        }
+        return saveWebSites;
+
+    }
+    ////// My own version of String.replace //////
+
+    public String Myreplace(char newChar, String word, int index) {
+        int y = word.length();
+        char[] c = new char[y];
+        for (int i = 0; i < word.length(); i++) {
+            c[i] = word.charAt(i);
+        }
+        c[index] = newChar;
+        word = String.copyValueOf(c);
+        return word;
+
+    }
+    ////// Implement QWERTY mistype technique //////
+
+    public ArrayList<String> QWERTYMisType(String URL, String topLevel) {
+        String save = URL;
+        int i = 0;
+        while (i < save.length()) {
+            char c = save.charAt(i);
+            for (int j = 0; j < QWERTY1.length; j++) {
+
+                if (c == QWERTY1[j]) {
+                    save = Myreplace(QWERTY2[j], save, i);
+                    saveWebSites.add(HTTP+save + "."+topLevel);
+                    save = URL;
+                }
+            }
+            save = URL;
+            i++;
+        }
+        save = URL;
+        i = 0;
+        while (i < save.length()) {
+            char c = save.charAt(i);
+            for (int j = 0; j < QWERTY2.length; j++) {
+
+                if (c == QWERTY2[j]) {
+                    save = Myreplace(QWERTY1[j], save, i);
+                    saveWebSites.add(HTTP+save + "."+topLevel);
+                    save = URL;
+                }
+            }
+            save = URL;
+            i++;
+
+        }
+        return saveWebSites;
+    }
+    ////// Add "s" at the end of given url //////
+
+    public ArrayList<String> urlPlural(String URL, String topLevel) {
+        String save = URL;
+        save = save + "s";
+        saveWebSites.add(HTTP+save + "."+topLevel);
+        return saveWebSites;
+    }
+    ////// Compine WWW with URL //////
+
+    public ArrayList<String> WWWWithUrl(String URL, String topLevel) {
+        String save = URL;
+        save = "www" + save;
+        saveWebSites.add(HTTP+save + "."+topLevel);
+        return saveWebSites;
+    }
+    ////// Top level domain manipulation //////
+
+    public ArrayList<String> topLevelDomainManipulation(String topDomain, String URL) {
+        String save = URL;
+        String temp;
+        String topDomainSave[] = topLevelDomain;
+        for (int i = 0; i < topLevelDomain.length; i++) {
+            temp = topLevelDomain[i];
+            if (temp.equals(topDomain)) {
+                topDomainSave[i] = "";
+                temp = topDomainSave[i];
+            }
+            if (!temp.equals("")) {
+                save = save + "." + topDomainSave[i];
+                this.saveWebSites.add(HTTP+save);
+                save = URL;
+            }
+        }
+        return saveWebSites;
+
+    }
+
+    /**
+     * @return the phishingEnumeration
+     */
+    public String getPhishingEnumeration() {
+        return phishingEnumeration;
+    }
+
+    /**
+     * @param phishingEnumeration the phishingEnumeration to set
+     */
+    public void setPhishingEnumeration(String phishingEnumeration) {
+        this.phishingEnumeration = phishingEnumeration;
+    }
+
+    /**
+     * @return the legitimate
+     */
+    public boolean isLegitimate() {
+        return legitimate;
+    }
+
+    /**
+     * @param legitimate the legitimate to set
+     */
+    public void setLegitimate(boolean legitimate) {
+        this.legitimate = legitimate;
+    }
+
+    /**
+     * @return the online
+     */
+    public boolean isOnline() {
+        return online;
+    }
+
+    /**
+     * @param online the online to set
+     */
+    public void setOnline(boolean online) {
+        this.online = online;
+    }
+}

@@ -1,0 +1,131 @@
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/idetect/!svn/ver/6/truncks/iDetect/src/idetect
+END
+Connection.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/idetect/!svn/ver/11/truncks/iDetect/src/idetect/Connection.java
+END
+History.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/idetect/!svn/ver/6/truncks/iDetect/src/idetect/History.java
+END
+WebSite.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/idetect/!svn/ver/11/truncks/iDetect/src/idetect/WebSite.java
+END
+DBConnection.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/idetect/!svn/ver/11/truncks/iDetect/src/idetect/DBConnection.java
+END
+GeneratePhishing.form
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/idetect/!svn/ver/11/truncks/iDetect/src/idetect/GeneratePhishing.form
+END
+IDetectAboutBox.form
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/idetect/!svn/ver/6/truncks/iDetect/src/idetect/IDetectAboutBox.form
+END
+WebSiteDA.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/idetect/!svn/ver/11/truncks/iDetect/src/idetect/WebSiteDA.java
+END
+SaxParser.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/idetect/!svn/ver/11/truncks/iDetect/src/idetect/SaxParser.java
+END
+SaxParserHelper.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svnroot/idetect/!svn/ver/11/truncks/iDetect/src/idetect/SaxParserHelper.java
+END
+IDetectView.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/idetect/!svn/ver/11/truncks/iDetect/src/idetect/IDetectView.java
+END
+SaxParserMain.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/idetect/!svn/ver/11/truncks/iDetect/src/idetect/SaxParserMain.java
+END
+PhishTankDataBase.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svnroot/idetect/!svn/ver/11/truncks/iDetect/src/idetect/PhishTankDataBase.java
+END
+Administrator.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/idetect/!svn/ver/6/truncks/iDetect/src/idetect/Administrator.java
+END
+EmaiMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/idetect/!svn/ver/6/truncks/iDetect/src/idetect/EmaiMessage.java
+END
+IDetectApp.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/idetect/!svn/ver/6/truncks/iDetect/src/idetect/IDetectApp.java
+END
+GeneratePhishing.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/idetect/!svn/ver/11/truncks/iDetect/src/idetect/GeneratePhishing.java
+END
+IDetectAboutBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/idetect/!svn/ver/6/truncks/iDetect/src/idetect/IDetectAboutBox.java
+END
+Phishing_Possiblity.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svnroot/idetect/!svn/ver/11/truncks/iDetect/src/idetect/Phishing_Possiblity.java
+END
+Time_Date.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/idetect/!svn/ver/6/truncks/iDetect/src/idetect/Time_Date.java
+END
+iDetectThreads.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/idetect/!svn/ver/10/truncks/iDetect/src/idetect/iDetectThreads.java
+END
+IDetectView.form
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/idetect/!svn/ver/11/truncks/iDetect/src/idetect/IDetectView.form
+END

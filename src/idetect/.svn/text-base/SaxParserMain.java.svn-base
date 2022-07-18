@@ -1,0 +1,91 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package idetect;
+
+import java.util.ArrayList;
+import org.xml.sax.Attributes;
+
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.helpers.XMLReaderFactory;
+
+/**
+ *
+ * @author youssef 19
+ */
+public class SaxParserMain {
+
+     ArrayList<String> ar = new ArrayList<String>();
+    ArrayList<String> onlinee = new ArrayList<String>();
+    ArrayList<String> verifiedd = new ArrayList<String>();
+
+    class SaxParserHelperMain extends DefaultHandler {
+
+        boolean url = false;
+        boolean online = false;
+        boolean verified = false;
+        String s ;
+
+        public void startElement(String nsURI, String strippedName,
+                String tagName, Attributes attributes) throws SAXException {
+            if (tagName.equalsIgnoreCase("url")) {
+                url = true;
+            }
+            if (tagName.equalsIgnoreCase("online")) {
+                online = true;
+            }
+            if(tagName.equalsIgnoreCase("verified")){
+                verified = true;
+            }
+        }
+
+        public void characters(char[] ch, int start, int length) {
+            if (url) {
+              //  System.out.println("Player: " + new String(ch, start, length));
+                s = new String(ch,start,length);
+                ar.add(s);
+
+                url = false;
+            } else if (online) {
+               // System.out.println("online: " + new String(ch, start, length));
+                onlinee.add(new String(ch, start, length));
+                online = false;
+            }
+            else
+                if(verified){
+                    //System.out.println("vervied : "+new String (ch,start,length));
+                    verifiedd.add(new String(ch, start, length));
+                    verified = false;
+
+                }
+        }
+
+
+    }
+     public void list( ) throws Exception
+	{
+		//XMLReader parser = XMLReaderFactory.createXMLReader("org.apache.crimson.parser.XMLReaderImpl");
+		//Refer to the comments below for the explanation for commenting above line and putting a new one below.
+		XMLReader parser = XMLReaderFactory.createXMLReader();
+		parser.setContentHandler(new SaxParserHelperMain());
+		parser.parse("PhishTankDB.xml");
+                System.out.println(ar);
+                System.out.println(onlinee);
+                System.out.println(verifiedd);
+	}
+    public static void main(String[] args) {
+        // TODO code application logic here
+         try {
+            // TODO code application logic here
+            new SaxParser().list();
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+        }
+        
+    }
+
+}

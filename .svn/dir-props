@@ -1,0 +1,11 @@
+K 10
+svn:ignore
+V 124
+PhishTankDB2010-04-20_17.xml
+PhishTankDB2010-04-26_22.xml
+PhishTankDB2010-05-01_18.xml
+PhishTankDB2010-5-2_1.xml
+dist
+build
+
+END

@@ -1,0 +1,4 @@
+user name=root
+password=barcelona19
+DB port number=3306
+DB host=localhost

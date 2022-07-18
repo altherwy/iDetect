@@ -1,0 +1,61 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package idetect;
+
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+/**
+ *
+ * @author youssef 19
+ */
+public class SaxParserHelper extends DefaultHandler {
+
+    boolean url = false;
+    boolean online = false;
+    boolean verified = false;
+    String s;
+    SaxParser SP = new SaxParser();
+
+    public void startElement(String nsURI, String strippedName,
+            String tagName, Attributes attributes) throws SAXException {
+        System.out.println("I am inside Partal class");
+        if (tagName.equalsIgnoreCase("url")) {
+            url = true;
+            System.out.println("I am inside Tganame");
+        }
+        if (tagName.equalsIgnoreCase("online")) {
+            online = true;
+        }
+        if (tagName.equalsIgnoreCase("verified")) {
+            verified = true;
+        }
+    }
+
+    public void characters(char[] ch, int start, int length) {
+        if (url) {
+            // System.out.println("Player: " + new String(ch, start, length));
+            s = new String(ch, start, length);
+            SP.ar.add(s);
+            System.out.println("I am inside new String");
+
+            url = false;
+        } else if (online) {
+            // System.out.println("online: " + new String(ch, start, length));
+            SP.onlinee.add(new String(ch, start, length));
+            online = false;
+        } else if (verified) {
+            //System.out.println("vervied : "+new String (ch,start,length));
+            SP.verifiedd.add(new String(ch, start, length));
+            verified = false;
+
+        }
+    }
+}
+
+
+

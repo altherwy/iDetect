@@ -1,0 +1,67 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package idetect;
+
+/**
+ *
+ * @author youssef 19
+ */
+public class EmaiMessage {
+    private int emailId;
+    private String emailAddress;
+    private String message;
+    private Administrator administrator;
+    public EmaiMessage(String emaiAddress,String message,int adminId)
+    {
+        emailId++;
+        this.setEmailAddress(emaiAddress);
+        this.setMessage(message);
+        this.administrator.setAdminId(adminId);
+    }
+
+    /**
+     * @return the emailId
+     */
+    public int getEmailId() {
+        return emailId;
+    }
+
+    /**
+     * @param emailId the emailId to set
+     */
+    public void setEmailId(int emailId) {
+        this.emailId = emailId;
+    }
+
+    /**
+     * @return the emaiAddress
+     */
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    /**
+     * @param emaiAddress the emaiAddress to set
+     */
+    public void setEmailAddress(String emaiAddress) {
+        this.emailAddress = emaiAddress;
+    }
+
+    /**
+     * @return the message
+     */
+    public String getMessage() {
+        return message;
+    }
+
+    /**
+     * @param message the message to set
+     */
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+}
